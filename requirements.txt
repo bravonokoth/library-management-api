@@ -1,0 +1,1 @@
+echo -e "fastapi==0.115.0\nuvicorn==0.30.6\nsqlalchemy==2.0.35\nmysql-connector-python==9.0.0\npydantic==2.9.2" > requirements.txt
