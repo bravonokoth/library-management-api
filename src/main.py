@@ -1,10 +1,9 @@
-cat << 'EOF' > src/main.py
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from database import get_db
-from models import Category, CategoryCreate, Book, BookCreate
-from crud import (
+from src.database import get_db
+from src.models import Category, CategoryCreate, Book, BookCreate
+from src.crud import (
     create_category, get_category, get_categories, update_category, delete_category,
     create_book, get_book, get_books, update_book, delete_book
 )
@@ -70,4 +69,3 @@ def delete_existing_book(book_id: int, db: Session = Depends(get_db)):
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return {"detail": "Book deleted"}
-EOF

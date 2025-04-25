@@ -1,6 +1,7 @@
-cat << 'EOF' > src/schemas.py
 from sqlalchemy import Column, Integer, String, ForeignKey
-from database import Base
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 class Category(Base):
     __tablename__ = "Categories"
@@ -17,4 +18,3 @@ class Book(Base):
     CategoryID = Column(Integer, ForeignKey("Categories.CategoryID"), nullable=False)
     TotalCopies = Column(Integer, nullable=False)
     AvailableCopies = Column(Integer, nullable=False)
-EOF

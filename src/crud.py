@@ -1,7 +1,7 @@
-cat << 'EOF' > src/crud.py
 from sqlalchemy.orm import Session
-from schemas import Category, Book
-from models import CategoryCreate, BookCreate
+from src.schemas import Category, Book
+from src.models import CategoryCreate, BookCreate
+from fastapi import HTTPException
 
 # Category CRUD
 def create_category(db: Session, category: CategoryCreate):
@@ -35,6 +35,8 @@ def delete_category(db: Session, category_id: int):
 
 # Book CRUD
 def create_book(db: Session, book: BookCreate):
+    if book.AvailableCopies > book.TotalCopies:
+        raise HTTPException(status_code=400, detail="AvailableCopies cannot exceed TotalCopies")
     db_book = Book(**book.dict())
     db.add(db_book)
     db.commit()
@@ -48,6 +50,8 @@ def get_books(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Book).offset(skip).limit(limit).all()
 
 def update_book(db: Session, book_id: int, book: BookCreate):
+    if book.AvailableCopies > book.TotalCopies:
+        raise HTTPException(status_code=400, detail="AvailableCopies cannot exceed TotalCopies")
     db_book = db.query(Book).filter(Book.BookID == book_id).first()
     if db_book:
         for key, value in book.dict().items():
@@ -62,4 +66,3 @@ def delete_book(db: Session, book_id: int):
         db.delete(db_book)
         db.commit()
     return db_book
-EOF
